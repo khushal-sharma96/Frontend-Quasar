@@ -8,7 +8,8 @@
             :options="input.options" :rules="input.rules" outlined dense />
           <q-input v-else-if="input.type != 'radio' || input.type != 'checkbox'" v-model="formData[input.name]"
             :rules="input.rules" :type="input.type" outlined dense />
-        </div>
+          </div>
+          <slot></slot>
       </q-card-section>
 
       <q-card-actions>
