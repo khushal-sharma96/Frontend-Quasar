@@ -1,12 +1,12 @@
 <template>
   <q-page class="flex flex-center">
-    <SignerDataComponent/>
+    <AdditionalSignerDataComponent/>
   </q-page>
 </template>
 
 <script setup>
 import { defineAsyncComponent } from 'vue';
-const SignerDataComponent = defineAsyncComponent(()=>import("../components/SignerData.vue"));
+const AdditionalSignerDataComponent = defineAsyncComponent(()=>import("../components/AdditionalSignerData.vue"));
 
 // Flag to toggle edit mode
 
