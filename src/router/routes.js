@@ -12,7 +12,12 @@ const routes = [
   {
     path: '/witnesses/details',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/WithnessesPAge.vue') }],
+    children: [{ path: '', component: () => import('pages/WithnessesPage.vue') }],
+  },
+  {
+    path: '/observers/details',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ObserversData.vue') }],
   },
   {
     path: '/:catchAll(.*)*',
