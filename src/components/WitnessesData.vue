@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-md">
-        <TableComponent title="Additional Signers Data" :tableData="additionalSigners" :columns="columns" row-key="name"
+        <TableComponent title="Witnesses Data" :tableData="additionalSigners" :columns="columns" row-key="name"
             showDeleteAction="1" showEditAction="1" showAddAction="1" @click-add="openModal()"
             @click-edit="openModal" />
     </div>
@@ -22,6 +22,12 @@ const additionalSigners = ref();
 
 const inputList = ref([
     {
+        label: "Email",
+        type: "email",
+        name: "email",
+        rules: [val => val && val.length > 0 || 'Email is mandatory!', val => /.+@.+\..+/.test(val) || 'Email must be valid!'],
+    },
+    {
         label: "Name",
         name: "name",
         type: "text",
@@ -31,11 +37,32 @@ const inputList = ref([
         ],
     },
     {
-        label: "Email",
-        type: "email",
-        name: "email",
-        rules: [val => val && val.length > 0 || 'Email is mandatory!', val => /.+@.+\..+/.test(val) || 'Email must be valid!'],
+        label: "Zip Code",
+        name: "zip_code",
+        type: "text",
+        rules: [
+            val => val && val.length > 0 || 'Zip is mandatory!',
+            val => val && val.length >= 3 || 'Enter the Valid zip code!'
+        ],
     },
+    {
+        label: "Address",
+        name: "address",
+        type: "text",
+        rules: [
+            val => val && val.length > 0 || 'Address is mandatory!',
+            val => val && val.length >= 3 || 'Enter the Valid address!'
+        ],
+    },
+    {
+        label: "State",
+        name: "state",
+        type: "text",
+        rules: [
+            val => val && val.length > 0 || 'State is mandatory!',
+            val => val && val.length >= 3 || 'Enter the Valid state!'
+        ],
+    }
 ]);
 
 const openModal = (data) => {
@@ -52,11 +79,11 @@ const openModal = (data) => {
 
 const addUser = (user) => {
     // Integrate add additional user api 
-    console.log("User Added!",user);
+    console.log("User Added!", user);
 }
 const editUser = (user) => {
     // Integrate add additional user api 
-    console.log("User Added!",user);
+    console.log("User Added!", user);
 }
 
 const submitForm = (formData) => {
@@ -80,6 +107,8 @@ const columns = [
         sortable: true,
         field: 'name'
     },
+    { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
+    { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
     { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
     { name: 'action', align: 'center', label: 'Action', },
 

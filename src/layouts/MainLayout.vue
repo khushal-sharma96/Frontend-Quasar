@@ -28,25 +28,21 @@ const appName = ref(process.env.VUE_APP_NAME);
 const linksList = [
   {
     title: 'Signer Details',
-    caption: 'quasar.dev',
     icon: 'school',
     link: '/',
   },
   {
     title: 'Additional Signer',
-    caption: 'github.com/quasarframework',
     icon: 'code',
     link: '/additional-signer/details',
   },
   {
     title: 'Witnesses',
-    caption: 'chat.quasar.dev',
     icon: 'chat',
     link: '/witnesses/details',
   },
   {
     title: 'Observers ',
-    caption: 'forum.quasar.dev',
     icon: 'record_voice_over',
     link: '/observers/details',
   },
