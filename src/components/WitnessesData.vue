@@ -108,8 +108,9 @@ const columns = [
         field: 'name'
     },
     { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
-    { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
-    { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
+    { name: 'zip_code', align: 'center', label: 'Zipcode', field: 'calories', sortable: true },
+    { name: 'address', align: 'center', label: 'Address', field: 'calories', sortable: true },
+    { name: 'state', align: 'center', label: 'State', field: 'calories', sortable: true },
     { name: 'action', align: 'center', label: 'Action', },
 
 ]
@@ -119,12 +120,16 @@ onMounted(() => {
         {
             email: "Frozen@yopmail.com",
             name: 'Froze',
-
+            state:"Haryana",
+            zip_code:"135003",
+            address:"H no. 876"
         },
         {
             name: 'Adward',
             email: "adward@yopmail.com",
-
+            state:"Haryana",
+            zip_code:"135003",
+            address:"H no. 876"
         },
     ]
 })
