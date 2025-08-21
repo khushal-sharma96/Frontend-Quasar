@@ -30,10 +30,9 @@ const props = defineProps({
   showExistingValue: {
     type: Boolean,
     default: false
-  }
+  },
 });
 const emit = defineEmits(["submitForm"]);
-
 const inputFields = ref(props.inputs);
 
 // Reactive form data
