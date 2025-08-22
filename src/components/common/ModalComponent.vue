@@ -1,5 +1,5 @@
 <template>
-    <q-dialog class="my-card" v-model="isModalOpen" backdrop-filter="blur(4px) saturate(150%)">
+    <q-dialog persistent class="my-card" v-model="isModalOpen" backdrop-filter="blur(4px) saturate(150%)">
         <q-card class="my-card" flat>
             <q-card-section class="row justify-between">
                 <div class="text-h6">{{ ModalTitle }}</div>

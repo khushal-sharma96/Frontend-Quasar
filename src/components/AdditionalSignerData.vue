@@ -1,15 +1,20 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md" v-if="additionalSigners && additionalSigners.length">
         <TableComponent title="Additional Signers Data" :tableData="additionalSigners" :columns="columns" row-key="name"
             showDeleteAction="1" showEditAction="1" showAddAction="1" @click-add="openModal()"
-            @click-edit="openModal" />
+            @click-edit="openModal" @delete-record="deleteRecord" />
+    </div>
+    <div v-else class="text-center">
+        <span class="text-red text-h6">{{ session?._id ? "No additional Signer is added yet!" :
+            "Please set the signer first to add the additional-signers!" }} </span> <br>
+        <q-btn @click="openModal()" v-if="session?._id" color="primary">Add</q-btn>
     </div>
     <ModalComponent ref="modalComponent" :ModalTitle="modalTitle">
         <FormComponent ref="formComponent" :inputs="inputList" @submitForm="submitForm" />
     </ModalComponent>
 </template>
 <script setup>
-import { defineAsyncComponent, onMounted, ref } from 'vue';
+import { defineAsyncComponent, onMounted, ref, inject } from 'vue';
 
 const TableComponent = defineAsyncComponent(() => import("./common/TableComponent.vue"));
 const ModalComponent = defineAsyncComponent(() => import("../components/common/ModalComponent.vue"));
@@ -17,17 +22,18 @@ const FormComponent = defineAsyncComponent(() => import("../components/common/Fo
 const formComponent = ref();
 const modalComponent = ref();
 const modalTitle = ref();
-
+const $http = inject("$http")
+const session = ref();
 const additionalSigners = ref();
 
 const inputList = ref([
     {
-        label: "Name",
-        name: "name",
+        label: "Full Name",
+        name: "fullName",
         type: "text",
         rules: [
-            val => val && val.length > 0 || 'Name is mandatory!',
-            val => val && val.length >= 3 || 'Enter the Valid name!'
+            val => val && val.length > 0 || 'Full Name is mandatory!',
+            val => val && val.length >= 3 || 'Enter the Valid Full name!'
         ],
     },
     {
@@ -50,53 +56,47 @@ const openModal = (data) => {
 }
 
 
-const addUser = (user) => {
-    // Integrate add additional user api 
-    console.log("User Added!",user);
-}
-const editUser = (user) => {
-    // Integrate add additional user api 
-    console.log("User Added!",user);
-}
-
-const submitForm = (formData) => {
+const submitForm = async (formData) => {
     modalComponent.value.isModalOpen = false;
     if (modalTitle.value.includes("Edit")) {
-        additionalSigners.value[formData.index] = (formData);
-        addUser(formData);
+        await $http.put(`/additional-signer/edit/${session.value._id}`, formData);
+        getAdditionSigners();
     }
     else {
-        additionalSigners.value.push(formData);
-        editUser(formData);
+        formData = await $http.post(`/additional-signer/add/${session.value._id}`, formData);
+        additionalSigners.value = (formData?.session?.additionalSigners);
     }
 }
 
 const columns = [
     {
-        name: 'name',
+        name: 'fullName',
         required: true,
         label: 'Full Name',
         align: 'left',
         sortable: true,
-        field: 'name'
+        field: 'fullName'
     },
     { name: 'email', align: 'center', label: 'Email', field: 'calories', sortable: true },
     { name: 'action', align: 'center', label: 'Action', },
 
 ]
 
+const getAdditionSigners = async () => {
+    // Although we can use the pinia store to store the signer data and only get the additional signers.....
+    let response = await $http.get("/signer");
+    if (response?.signer) {
+        session.value = response;
+        additionalSigners.value = response?.additionalSigners;
+    }
+}
+
+const deleteRecord = async(data)=>{
+    await $http.delete(`/additional-signer/${session.value._id}/${data?._id}`);
+    additionalSigners.value.splice(additionalSigners.value.findIndex((r)=>r._id==data?._id),1)
+}
+
 onMounted(() => {
-    additionalSigners.value = [
-        {
-            email: "Frozen@yopmail.com",
-            name: 'Froze',
-
-        },
-        {
-            name: 'Adward',
-            email: "adward@yopmail.com",
-
-        },
-    ]
+    getAdditionSigners();
 })
 </script>

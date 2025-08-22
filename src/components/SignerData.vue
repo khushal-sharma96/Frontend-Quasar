@@ -10,7 +10,7 @@
             <div v-if="signer">
                 <q-list bordered separator>
                     <q-item clickable v-ripple>
-                        <q-item-section><b>Name</b>{{ signer.name }}</q-item-section>
+                        <q-item-section><b>Name</b>{{ signer.fullName }}</q-item-section>
                     </q-item>
                     <q-item clickable v-ripple>
                         <q-item-section><b>Email</b>{{ signer.email }}</q-item-section>
@@ -27,21 +27,22 @@
     </ModalComponent>
 </template>
 <script setup>
-import { ref, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent, onMounted, inject } from 'vue';
 const ModalComponent = defineAsyncComponent(() => import("../components/common/ModalComponent.vue"));
 const FormComponent = defineAsyncComponent(() => import("../components/common/FormComponent.vue"));
+
 const signer = ref();
 const formComponent = ref();
 const inputList = ref([
     {
-        label: "Name",
-        name: "name",
+        label: "Full Name",
+        name: "fullName",
         type: "text",
         rules: [
             val => val && val.length > 0 || 'Name is mandatory!',
             val => val && val.length >= 3 || 'Enter the Valid name!'
         ],
-        value: signer.value?.name,
+        value: signer.value?.fullName,
     },
     {
         label: "Email",
@@ -51,6 +52,8 @@ const inputList = ref([
         value: signer.value?.email,
     },
 ]);
+const $http = inject("$http")
+
 const modalComponent = ref();
 
 const openActionForm = () => {
@@ -61,8 +64,23 @@ const openActionForm = () => {
         }, 500);
 }
 
-const submitForm = (formData) => {
+const submitForm = async (formData) => {
     modalComponent.value.isModalOpen = false;
+    if (signer.value) {
+        await $http.put(`/signer/edit/${signer.value.session_id}`, formData);
+    }
+    else {
+        await $http.post(`/signer/add`, formData);
+    }
     signer.value = formData;
 }
+onMounted(async () => {
+    const response = await $http.get("/signer");
+    if (response?.signer) {
+        signer.value = {
+            ...response?.signer,
+            session_id: response?.session_id,
+        };
+    }
+})
 </script>
